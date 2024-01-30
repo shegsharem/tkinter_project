@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
+from tkinter import ttk
 from ctypes import windll
 
 windll.shcore.SetProcessDpiAwareness(1) # Set high dpi for window
@@ -22,7 +23,7 @@ class Window(tk.Tk):
         self.toolbar = Toolbar(self)
         self.editor = Editor(self)
 
-class Toolbar(tk.Frame):
+class Toolbar(ttk.Frame):
     def __init__(self, master, **kwargs) -> None:
         super().__init__(master, **kwargs)
         window = self.master
@@ -49,13 +50,19 @@ class Toolbar(tk.Frame):
         filename = filedialog.askopenfilename(parent=self)
         if filename != '': return filename
 
-class Editor(tk.Frame):
+class Editor(ttk.Frame):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
         window = self.master
-        self.pack(side='left')
-        button = tk.Button(window, text="Open")
-        button.pack(side='left')
+        open_button = ttk.Button(window, text="Cancel")
+        open_button.pack(side='bottom',anchor='se',padx=10,pady=15,ipadx=5, expand=False)
+        new_button = ttk.Button(window, text="Save")
+        new_button.pack(side='bottom',anchor='se',padx=10,pady=15,ipadx=5,after=open_button,)
+
+        sep = ttk.Separator(window)
+        sep.pack(padx=10,pady=10,fill=tk.X,side='right',anchor='center')
+        self.pack()
+
 
 
 if __name__ == "__main__":
