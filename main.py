@@ -1,10 +1,8 @@
 import tkinter as tk
+from tkinter import filedialog
 from ctypes import windll
 
 windll.shcore.SetProcessDpiAwareness(1) # Set high dpi for window
-
-def yeth():
-        print("YYE")
 
 class Window(tk.Tk):
     def __init__(self, title:str=None, size:str=None) -> None:
@@ -18,32 +16,49 @@ class Window(tk.Tk):
         super().__init__()
         if title: self.title(title)
         if size: self.geometry(size)
-        else: self.geometry("640x390+10+10")
+        else: self.geometry("1020x640+10+10")
 
         # Call Toolbar Constructor
-        self.toolbar = Toolbar()
-
-        # Bind keyboard shortcuts
-        self.bind('<Control-n>',yeth)
-    
-    
+        self.toolbar = Toolbar(self)
+        self.editor = Editor(self)
 
 class Toolbar(tk.Frame):
-    def __init__(self) -> None:
-        super().__init__()
-        self.UI() # Process UI
-    
-    def UI(self) -> None:
-        self.master.title("Menu")
-        toolbar = tk.Menu(self.master)
-        self.master.configure(menu=toolbar)
+    def __init__(self, master, **kwargs) -> None:
+        super().__init__(master, **kwargs)
+        window = self.master
 
-        filemenu = tk.Menu(toolbar, tearoff='off') # Add new button to toolbar
-        filemenu.add_command(label="New",accelerator="Ctrl+N", command=None)
-        filemenu.add_command(label="Open", accelerator="Ctrl+O", command=None)
+        # Toolbar
+        toolbar = tk.Menu(window)
+        window.configure(menu=toolbar)
+
+        # Bind keyboard shortcuts
+        window.bind('<Control-n>',self.new_file)
+        window.bind('<Control-o>',self.open_file)
+
+        # File
+        filemenu = tk.Menu(toolbar, tearoff='off')
+        filemenu.add_command(label="New",accelerator="Ctrl+N", command=self.new_file)
+        filemenu.add_command(label="Open", accelerator="Ctrl+O", command=self.open_file)
 
         toolbar.add_cascade(label="File", menu=filemenu) # Pack filemenu and put in toolbar
+    
+    def new_file(self, *args) -> None:
+        print("New File Request")
+
+    def open_file(self, *args) -> None:
+        filename = filedialog.askopenfilename(parent=self)
+        if filename != '': return filename
+
+class Editor(tk.Frame):
+    def __init__(self, master, **kwargs):
+        super().__init__(master, **kwargs)
+        window = self.master
+        self.pack(side='left')
+        button = tk.Button(window, text="Open")
+        button.pack(side='left')
+
 
 if __name__ == "__main__":
-    window = Window()
+    window = Window(title="Pixel Sprite Editor")
+    
     window.mainloop()
