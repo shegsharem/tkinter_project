@@ -1,5 +1,6 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout, QLineEdit, QHBoxLayout, QVBoxLayout, QTextEdit
+from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout, QLineEdit, QHBoxLayout, QVBoxLayout, QTextEdit, QMenuBar
+from PyQt6.QtCore import Qt
 from package.mainwindow import MainWindow
 
 QApplication.setApplicationName('My Program')
@@ -8,16 +9,24 @@ name = QApplication.applicationName()
 version = QApplication.applicationVersion()
 
 stylesheet = """
+    QMainWindow:separator {
+        background: #3C3C3E;
+    }
     QLineEdit{
-        font-family: JetBrainsMono Nerd Font;
+        font-family: JetBrainsMono Nerd Font, Consolas;
         font-size: 16px;
+        padding: 5px;
+        border-radius: 10px;
     }
-    QLineEdit:focus{
-        background-color: #161b22;
+
+    QPushButton{
+        font-family: JetBrainsMono Nerd Font, Consolas;
     }
-"""
-app_style = """
-{background-color: #21262d}
+
+    QMenuBar{
+        font-family: JetBrainsMono Nerd Font, Consolas;
+    }
+
 """
 
 class Menu(QWidget):
@@ -30,6 +39,10 @@ class Menu(QWidget):
         submit_button = QPushButton("Submit")
         submit_button.clicked.connect(self.submit)
 
+        menubar = QMenuBar(parent)
+        menubar.addMenu("File")
+        menubar.addMenu("Edit")
+
         self.input = QLineEdit()
         self.input.setPlaceholderText("Title")
         self.input.setStyleSheet(stylesheet)
@@ -37,6 +50,9 @@ class Menu(QWidget):
         self.input.returnPressed.connect(self.submit)
 
         self.textbox = QTextEdit()
+
+        menubarbox = QHBoxLayout()
+        menubarbox.addWidget(menubar)
 
         # Widget layout setup
         hbox = QHBoxLayout()
@@ -49,9 +65,11 @@ class Menu(QWidget):
         vbox.addLayout(hbox)
 
         grid = QGridLayout()
-        grid.addWidget(self.input,0,0)
-        grid.addWidget(self.textbox,1,0)
-        grid.addLayout(vbox,2,0)
+        grid.addLayout(menubarbox,0,0)
+        grid.addWidget(self.input,1,0)
+        grid.addWidget(self.textbox,2,0)
+        grid.addLayout(vbox,3,0)
+
 
         self.setLayout(grid)
 
@@ -67,9 +85,9 @@ class Menu(QWidget):
 def run() -> None:
     """Run app"""
     app = QApplication(sys.argv)
-    #app.setStyle('fusion')
     window = MainWindow()
     Menu(window)
-
+    #app.setStyle('fusion')
+    app.setStyleSheet(stylesheet)
     window.show()
     app.exec()
