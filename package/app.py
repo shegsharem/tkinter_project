@@ -45,7 +45,7 @@ class Plot(pyqtgraph.PlotWidget):
     """PyQt6 Widget for plotting graphs"""
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
-        self.setBackground("#FFFFFF")
+        #self.setBackground("#FFFFFF")
         self.time = [1,2,3,4,5,6,7]
         self.temperature = [29,30,30,10,20,12,34]
         self.data = self.plot(self.time,self.temperature)
@@ -126,7 +126,7 @@ def run() -> None:
     app = QApplication(sys.argv)
     window = MainWindow()
     Menu(window)
-    #app.setStyle('fusion')
+    app.setStyle('fusion')
     app.setStyleSheet(stylesheet)
     window.show()
     app.exec()
