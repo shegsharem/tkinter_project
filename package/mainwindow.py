@@ -5,3 +5,5 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("Main Window")
         self.setGeometry(20,50,500,500)
+
+        self.menubar = self.menuBar()

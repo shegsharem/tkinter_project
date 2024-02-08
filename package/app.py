@@ -1,7 +1,10 @@
 import sys
 from random import randint
-from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout, QLineEdit, QHBoxLayout, QVBoxLayout, QTextEdit, QMenuBar, QLabel
+import math
+import numpy as np
+from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout, QLineEdit, QHBoxLayout, QVBoxLayout, QLabel
 from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtGui import QAction
 import pyqtgraph
 
 from package.mainwindow import MainWindow
@@ -11,6 +14,8 @@ QApplication.setApplicationVersion('0.1')
 name = QApplication.applicationName()
 version = QApplication.applicationVersion()
 
+
+PI = 3.1412654
 stylesheet = """
     QMainWindow:separator {
         background: #3C3C3E;
@@ -46,9 +51,10 @@ class Plot(pyqtgraph.PlotWidget):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         #self.setBackground("#FFFFFF")
-        self.time = [1,2,3,4,5,6,7]
-        self.temperature = [29,30,30,10,20,12,34]
-        self.data = self.plot(self.time,self.temperature)
+        self.xvalues = np.arange(-2*PI,2*PI,0.01)
+        self.function = [math.sin(x) for x in self.xvalues]
+        print(self.function)
+        self.data = self.plot(self.xvalues,self.function)
 
         # Setup a timer to trigger the redraw by calling update_plot.
         self.timer = QTimer()
@@ -59,12 +65,13 @@ class Plot(pyqtgraph.PlotWidget):
     def update(self) -> None:
         """Update plot"""
         self.data.clear()
-        self.temperature = [randint(15,35) for i in range(7)]
-        self.data = self.plot(self.time,self.temperature)
+        self.data = self.plot(self.xvalues,self.function)
 
 class Menu(QWidget):
     def __init__(self, parent) -> None:
         super().__init__(parent)
+
+        file_action = QAction("Your button", parent)
 
         cancel_button = QPushButton("Cancel")
         cancel_button.clicked.connect(self.cancel)
@@ -101,6 +108,9 @@ class Menu(QWidget):
         self.input.hide()
 
         self.setLayout(grid)
+
+        file_menu = parent.menubar.addMenu("File")
+
 
         # Set widget as centered.
         parent.setCentralWidget(self)
