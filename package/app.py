@@ -52,8 +52,7 @@ class Plot(pyqtgraph.PlotWidget):
         super().__init__(parent)
         #self.setBackground("#FFFFFF")
         self.xvalues = np.arange(-2*PI,2*PI,0.01)
-        self.function = [math.sin(x) for x in self.xvalues]
-        print(self.function)
+        self.function = [x**3 for x in self.xvalues]
         self.data = self.plot(self.xvalues,self.function)
 
         # Setup a timer to trigger the redraw by calling update_plot.
