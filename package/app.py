@@ -53,7 +53,10 @@ class Plot(pyqtgraph.PlotWidget):
         #self.setBackground("#FFFFFF")
         self.xvalues = np.arange(-2*PI,2*PI,0.1)
         self.function = [x**3 for x in self.xvalues]
-        self.data = self.plot(self.xvalues,self.function)
+        self.data = self.plot(self.xvalues,self.function, pen=pyqtgraph.mkPen("b", width=5))
+        self.plotItem.setTitle("Hello there")
+        self.plotItem.showGrid(x=True,y=True)
+        self.plotItem.showAxes(True)
 
         # Setup a timer to trigger the redraw by calling update_plot.
         self.timer = QTimer()
