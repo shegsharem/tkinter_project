@@ -51,7 +51,7 @@ class Plot(pyqtgraph.PlotWidget):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         #self.setBackground("#FFFFFF")
-        self.xvalues = np.arange(-2*PI,2*PI,0.01)
+        self.xvalues = np.arange(-2*PI,2*PI,0.1)
         self.function = [x**3 for x in self.xvalues]
         self.data = self.plot(self.xvalues,self.function)
 
